@@ -1,8 +1,8 @@
 # Main package description
 [tool.poetry]
-name = "<PACKAGENAME>"
+name = "s3cargo"
 version = "0.1.0"
-description = "<DESCRIPTION>"
+description = "Manage your projects in S3 buckets."
 authors = [
     "MONTANA Knowledge Management ltd. <info@distiller.dev>",
     "Daniel Nagy <daniel.nagy@montana.hu>",
@@ -18,8 +18,6 @@ license = "AGPL"
 python = ">=3.9"
 
 
-# Dependencies for developers
-# list all devtools here
 [tool.poetry.dev-dependencies]
 black = "*"
 coverage = "*"
@@ -40,14 +38,13 @@ build-backend = "poetry.core.masonry.api"
 
 #BLACK
 [tool.black]
-line-length = 120
+line-length = 80
 target-version = ['py39']
-# force-exclude = '''
-#   (
-#     resources/
-#   | tests/
-#   )
-# '''
+force-exclude = '''
+  (
+    test/
+  )
+'''
 quiet = true
 
 
@@ -56,7 +53,7 @@ quiet = true
 
 [tool.coverage.run]
 command_line = "-m py.test"
-source = ['src']
+source = ['s3cargo']
 branch = true
 # omit = []
 
@@ -68,7 +65,7 @@ exclude_lines = [
     'def __str',
     '@(abc\.)?abstractmethod'
 ]
-omit = ['tests']
+omit = ['test']
 
 
 
@@ -77,7 +74,7 @@ omit = ['tests']
 
 [tool.isort]
 profile = "black"
-line_length = 120
+line_length = 8
 case_sensitive = true
 use_parentheses = false
 include_trailing_comma = true
@@ -89,7 +86,7 @@ quiet = true
 max-line-length = 120
 fail-under = 0.85
 ignore = ['LICENSE']
-ignore-paths = ['tests', 'resources']
+ignore-paths = ['test']
 disable = [
     "bad-continuation",
     "duplicate-code",
