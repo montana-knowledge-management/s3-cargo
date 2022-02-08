@@ -1,14 +1,10 @@
-from os import getenv
-from pathlib import Path
 from shutil import rmtree
+from test.utils import BUCKETNAME, TESTROOT, URL, export_config
 
 import pytest
-import yaml
 
 from s3cargo import Cargo
 from s3cargo.cargomain import load_config_file
-
-TESTROOT = Path(__file__).parent
 
 
 @pytest.fixture
@@ -17,8 +13,8 @@ def starting_config():
         "options": {
             "projectid": "test_project",
             "destination": "test_workdir",
-            "url": getenv("S3_URL"),
-            "bucket": getenv("S3_BUCKET"),
+            "url": URL,
+            "bucket": BUCKETNAME,
         },
         "resources": [],
         "futures": [],
@@ -30,15 +26,6 @@ def starting_config():
         TESTROOT.joinpath("cargoconf.yml").unlink()
     except FileNotFoundError:
         pass
-
-
-def export_config(cfg):
-    """
-    Export the config dictionary into the cargoconf.yml file.
-    """
-    f = TESTROOT.joinpath("cargoconf.yml")
-    f.write_text(yaml.dump(cfg))
-    return f
 
 
 def test_invalid_file_mode(starting_config):
