@@ -16,6 +16,9 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - name: Setup S3 Credentials
+        env:
+          S3_PUBLIC_KEY: ${{secrets.S3_PUBLIC_KEY}}
+          S3_SECRET_KEY: ${{secrets.S3_SECRET_KEY}}
         run: |
           mkdir -p ~/.aws
           touch ~/.aws/credentials
@@ -40,6 +43,9 @@ jobs:
           key: ${{ matrix.os }}-pip-${{ secrets.CACHE_SEED }}-${{ matrix.python }}-${{ hashFiles('./poetry.lock') }}
           restore-keys: ${{ matrix.os }}-pip-${{ secrets.CACHE_SEED }}-${{ matrix.python }}-
       - name: Test
+        env:
+          S3_URL: ${{secrets.S3_URL}}
+          S3_BUCKET: ${{secrets.S3_BUCKET}}
         run: |
           poetry run coverage run --module pytest
       - name: Verify test coverage
