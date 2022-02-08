@@ -1,15 +1,16 @@
 import tarfile
 from fnmatch import fnmatch
 from itertools import chain
-from os import lstat
+from os import getenv, lstat
+from os.path import expandvars
 from pathlib import Path, PurePath
 from shutil import rmtree
 from zipfile import ZIP_DEFLATED, ZipFile
 
 import boto3
+import botocore.exceptions as be
 from pydantic import FilePath
 from yaml import safe_load
-from os.path import expandvars
 
 from s3cargo import CargoConfig, fail
 from s3cargo.cargoconf import Future, ResourceItem
@@ -20,9 +21,10 @@ class Cargo:
     def __init__(self, cargoconf: FilePath):
         self.cfgfile = cargoconf
         self.cfg = load_config_file(self.cfgfile)
+        self.dst = cargoconf.parent.joinpath(self.cfg.options.destination)
+
         self.s3 = boto3.resource("s3", endpoint_url=self.cfg.options.url)
         self.bucket = self.s3.Bucket(self.cfg.options.bucket)
-        self.dst = cargoconf.parent.joinpath(self.cfg.options.destination)
 
     def __enter__(self):
         self.open_session()
@@ -50,7 +52,6 @@ class Cargo:
             filtered_keys = self._fileter_keys(fetched_keys, resource)
             self._pull_keys(resource, filtered_keys)
 
-
     def _fetch_keys(self, prefix):
         try:
             yield from self.bucket.objects.filter(Prefix=prefix)
@@ -59,7 +60,7 @@ class Cargo:
 
     def _pull_keys(self, resource, keys):
         for key in keys:
-            if key.key[-1] == '/':
+            if key.key[-1] == "/":
                 continue
 
             fname = Path(*key.key.split("/")[1:])
@@ -94,7 +95,12 @@ class Cargo:
         for key in keys:
             first, *rest = PurePath(resource.selector).parts
             if first == "home":
-                selector = PurePath(self.cfg.options.projectid, first, self.cfg.options.user, *rest)
+                selector = PurePath(
+                    self.cfg.options.projectid,
+                    first,
+                    self.cfg.options.user,
+                    *rest,
+                )
             else:
                 selector = PurePath(self.cfg.options.projectid, first, *rest)
 
@@ -110,7 +116,9 @@ class Cargo:
             print(f"\r{progress}{key.key}", end="", flush=True)
 
         callback.done = 0
-        self.bucket.download_file(key.key, to.as_posix(), Callback=lambda ch: callback(key, ch))
+        self.bucket.download_file(
+            key.key, to.as_posix(), Callback=lambda ch: callback(key, ch)
+        )
         print("\r" + green("DONE".center(10)) + key.key)
 
     def close_session(self):
@@ -125,7 +133,9 @@ class Cargo:
     def _compress_push_future(self, future, items):
         filename = self.dst / f"{future.name}.{future.compress}"
         if future.compress == "zip":
-            with ZipFile(filename, "w", compression=ZIP_DEFLATED, compresslevel=9) as zfile:
+            with ZipFile(
+                filename, "w", compression=ZIP_DEFLATED, compresslevel=9
+            ) as zfile:
                 for item in items:
                     zfile.write(item, item.name)
 
@@ -145,7 +155,9 @@ class Cargo:
         for item in items:
             for dest in future.emit:
                 dest = self._validate_future_destination(dest)
-                key = "/".join([self.cfg.options.projectid, dest, future.name, item.name])
+                key = "/".join(
+                    [self.cfg.options.projectid, dest, future.name, item.name]
+                )
                 self._upload_item(item, key)
 
     def _validate_future_destination(self, d):
@@ -153,7 +165,9 @@ class Cargo:
         if first == "shared":
             return PurePath("shared", *rest).as_posix()
         if first == "input":
-            return PurePath("home", self.cfg.options.user, "input", *rest).as_posix()
+            return PurePath(
+                "home", self.cfg.options.user, "input", *rest
+            ).as_posix()
         else:
             return PurePath("home", self.cfg.options.user, *rest).as_posix()
 
@@ -165,7 +179,9 @@ class Cargo:
 
         callback.done = 0
         callback.size = lstat(item).st_size
-        self.bucket.upload_file(item.as_posix(), key, Callback=lambda ch: callback(key, ch))
+        self.bucket.upload_file(
+            item.as_posix(), key, Callback=lambda ch: callback(key, ch)
+        )
         print(green("\r" + "DONE".center(10)) + key)
 
 

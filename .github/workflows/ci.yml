@@ -32,6 +32,12 @@ jobs:
           path: ~/.cache/pip
           key: ${{ matrix.os }}-pip-${{ secrets.CACHE_SEED }}-${{ matrix.python }}-${{ hashFiles('./poetry.lock') }}
           restore-keys: ${{ matrix.os }}-pip-${{ secrets.CACHE_SEED }}-${{ matrix.python }}-
+      - name: Setup S3 Credentials
+        run: |
+          mkdir -p ~/.aws/credentials
+          echo "[default]" >> ~/.aws/credentials
+          echo "aws_access_key_id=${S3_PUBLIC_KEY}" >> ~/.aws/credentials
+          echo "aws_secret_access_key=${S3_SECRET_KEY}" >> ~/.aws/credentials
       - name: Test
         run: |
           poetry run coverage run --module pytest

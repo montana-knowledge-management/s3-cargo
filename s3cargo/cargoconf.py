@@ -9,7 +9,7 @@ class CargoOptions(BaseModel):
     destination: Path
     url: HttpUrl
     bucket: str
-    user: str=""
+    user: str = ""
 
     cleanup_workdir: bool = False
 
@@ -23,12 +23,14 @@ class ResourceItem(BaseModel):
     mode: str = "persistent"
     bind: str = ""
     unpack: bool = False
-    unravel: bool = True
+    unravel: bool = False
 
     @validator("mode")
     def check_mode(cls, v):
         if v.lower() not in {"persistent", "transient"}:
-            raise ValueError(f'mode can be either "transient" or "persistent".Got: "{v}"')
+            raise ValueError(
+                f'mode can be either "transient" or "persistent".Got: "{v}"'
+            )
 
         return v
 

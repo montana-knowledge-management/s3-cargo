@@ -32,6 +32,7 @@ pylint = "*"
 
 
 # build system setup
+pudb = "^2022.1"
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
@@ -77,7 +78,7 @@ omit = ['test']
 
 [tool.isort]
 profile = "black"
-line_length = 8
+line_length = 80
 case_sensitive = true
 use_parentheses = false
 include_trailing_comma = true
