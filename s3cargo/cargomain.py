@@ -164,7 +164,9 @@ class Cargo:
         first, *rest = PurePath(d).parts
         if first == "shared":
             return PurePath("shared", *rest).as_posix()
-        if first == "input":
+        elif first == "project_results":
+            return PurePath("project_results", *rest).as_posix()
+        elif first == "input":
             return PurePath(
                 "home", self.cfg.options.user, "input", *rest
             ).as_posix()

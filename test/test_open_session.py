@@ -6,6 +6,7 @@ import pytest
 import yaml
 
 from s3cargo import Cargo
+from s3cargo.cargomain import load_config_file
 
 TESTROOT = Path(__file__).parent
 
@@ -23,8 +24,11 @@ def starting_config():
     }
     yield cfg
 
-    rmtree(TESTROOT.joinpath(cfg['options']['destination']))
-    TESTROOT.joinpath('cargoconf.yml').unlink()
+    try:
+        rmtree(TESTROOT.joinpath(cfg['options']['destination']))
+        TESTROOT.joinpath('cargoconf.yml').unlink()
+    except FileNotFoundError:
+        pass
 
 
 def export_config(cfg):
@@ -35,6 +39,15 @@ def export_config(cfg):
     f.write_text(yaml.dump(cfg))
     return f
 
+def test_invalid_file_mode(starting_config):
+    """
+    Pydantic should raise an exception if the file mode is not `transient` or
+    `persistent`.
+    """
+    file = "input/f-80e1.txt"
+    starting_config['resources'] = [{f'file': {'mode':'invalid_mode'}}]
+    with pytest.raises(ValueError):
+        load_config_file(export_config(starting_config))
 
 def test_1_file_root(starting_config):
     """
@@ -42,7 +55,7 @@ def test_1_file_root(starting_config):
     Expected result should be: test_workdir/f-80e1.txt
     """
     file = "input/f-80e1.txt"
-    starting_config['resources'] = [file]
+    starting_config['resources'] = [{file:{'mode':'transient'}}]
     test_cfg = export_config(starting_config)
     c = Cargo(test_cfg)
     c.open_session()
