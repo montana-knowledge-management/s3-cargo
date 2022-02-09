@@ -20,6 +20,7 @@ PyYAML = "^6.0"
 pydantic = "^1.9.0"
 boto3 = "^1.20.49"
 pudb = {version = "^2022.1", optional = true}
+mkdocs = "^1.2.3"
 
 
 [tool.poetry.dev-dependencies]
