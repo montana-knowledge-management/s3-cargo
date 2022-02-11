@@ -1,1 +1,56 @@
-site_name: My Docs
+site_name: S3Cargo
+site_url: https://github.com//montana-knowledge-management/s3-cargo
+repo_url: https://github.com//montana-knowledge-management/s3-cargo
+repo_name: montana-knowledge-management/s3-cargo
+
+nav:
+  - Project structure: project.md
+  - Configuration: cargoconf.md
+
+
+theme:
+  language: en
+  name: material
+  features:
+    # - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.expand
+    # - navigation.top
+    - content.code.annotate
+
+  palette:
+    - primary: amber
+
+
+markdown_extensions:
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+      clickable_checkbox: true
+  - pymdownx.snippets
+  - pymdownx.highlight:
+      use_pygments: true
+      linenums: false
+      linenums_style: pymdownx-inline
+  - pymdownx.superfences
+  - pymdownx.keys
+  - admonition
+  - def_list
+
+plugins:
+  - search:
+      lang: en
+  - git-revision-date
+  - mkdocstrings:
+      handlers:
+        python:
+          rendering:
+            show_root_toc_entry: false
+            show_source: false
+
+
+extra_javascript:
+  - javascript/config.js
+  - https://polyfill.io/v3/polyfill.min.js?features=es6
+  - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
