@@ -48,7 +48,7 @@ class Future(BaseModel):
 
 class CargoConfig(BaseModel):
     options: CargoOptions
-    resources: list[ResourceItem]
+    resources: list[ResourceItem] = []
     futures: list[Future] = []
 
     @validator("resources", each_item=True, pre=True)

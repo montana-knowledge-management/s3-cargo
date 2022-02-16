@@ -19,6 +19,11 @@ python = ">=3.9, <4"
 PyYAML = "^6.0"
 pydantic = "^1.9.0"
 boto3 = "^1.20.49"
+pudb = {version = "^2022.1", optional = true}
+mkdocs = "^1.2.3"
+mkdocs-material = "^8.1.11"
+mkdocs-git-revision-date-plugin = "^0.3.1"
+mkdocstrings = "^0.18.0"
 
 
 [tool.poetry.dev-dependencies]
@@ -29,8 +34,9 @@ pytest = "*"
 isort = "*"
 pyupgrade = "*"
 pylint = "*"
-pudb = {version = "^2022.1", optional = true}
 
+[tool.poetry.extras]
+dev_tools = ["pudb"]
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
@@ -43,11 +49,11 @@ build-backend = "poetry.core.masonry.api"
 [tool.black]
 line-length = 80
 target-version = ['py39']
-force-exclude = '''
-  (
-    test/
-  )
-'''
+# force-exclude = '''
+#   (
+#     test
+#   )
+# '''
 quiet = true
 
 
@@ -84,6 +90,7 @@ include_trailing_comma = true
 multi_line_output = 3
 force_grid_wrap = 0
 quiet = true
+skip = ["__init__.py"]
 
 [tool.pylint.MASTER]
 max-line-length = 120
