@@ -1,7 +1,7 @@
 # S3-Cargo
 
 [![tests](https://github.com/montana-knowledge-management/s3-cargo/actions/workflows/ci.yml/badge.svg)](https://github.com/robust/actions)
-[![codecov](https://codecov.io/gh/montana-knowledge-management/s3-cargo/branch/main/graph/badge.svg?token=KMYGW7NHWH)](https://codecov.io/gh/montana-knowledge-management/s3-cargo)
+[![codecov](https://codecov.io/gh/montana-knowledge-management/s3-cargo/branch/main/graph/badge.svg?token=U3XNPV3Z43)](https://codecov.io/gh/montana-knowledge-management/s3-cargo)
 [![License: AGPL v3](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://GitHub.com/Naereen/StrapDown.js/graphs/commit-activity)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
