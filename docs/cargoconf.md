@@ -110,7 +110,7 @@ is incorrect or the selected files don't exist.
 
 !!! note
 
-    * When you write selectors you should not include the `projectid` in the path. 
+    * When you write selectors you should not include the `projectid` in the path.
     * You don't have to specify the user in the home directory because it will
       be resolved automatically. See examples.
 
@@ -193,7 +193,7 @@ option. Supported file formats: `zip, tar.bz2`. Default value is `False`.
     the contents of the archive will overwrite any existing file in the local
     worworking directory.
 
- 
+
 
 ### unravel
 

@@ -1,11 +1,9 @@
 from os import getenv
 from pathlib import Path
-from shutil import rmtree
 
 import boto3
-from botocore.exceptions import ClientError
-import pytest
 import yaml
+from botocore.exceptions import ClientError
 
 TESTROOT = Path(__file__).parent
 URL = getenv("S3_URL")
@@ -15,7 +13,6 @@ RESULTS = "project_results"
 
 s3 = boto3.resource("s3", endpoint_url=URL)
 bucket = s3.Bucket(BUCKETNAME)
-
 
 
 def export_config(cfg):
