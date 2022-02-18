@@ -1,20 +1,19 @@
 import tarfile
 from fnmatch import fnmatch
 from itertools import chain
-from os import getenv, lstat
+from os import lstat
 from os.path import expandvars
 from pathlib import Path, PurePath
 from shutil import rmtree
 from zipfile import ZIP_DEFLATED, ZipFile
 
 import boto3
-import botocore.exceptions as be
 from pydantic import FilePath
 from yaml import safe_load
 
-from s3cargo import CargoConfig, fail
-from s3cargo.cargoconf import Future, ResourceItem
-from s3cargo.msgformat import green
+from s3_cargo import CargoConfig, fail
+from s3_cargo.cargoconf import Future, ResourceItem
+from s3_cargo.msgformat import green
 
 
 class Cargo:

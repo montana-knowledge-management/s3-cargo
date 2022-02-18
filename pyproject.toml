@@ -62,7 +62,7 @@ quiet = true
 
 [tool.coverage.run]
 command_line = "-m py.test"
-source = ['s3cargo']
+source = ['s3_cargo']
 branch = true
 # omit = []
 

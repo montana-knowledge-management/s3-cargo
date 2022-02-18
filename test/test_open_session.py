@@ -3,8 +3,8 @@ from test.utils import BUCKETNAME, TESTROOT, URL, export_config
 
 import pytest
 
-from s3cargo import Cargo
-from s3cargo.cargomain import load_config_file
+from s3_cargo import Cargo
+from s3_cargo.cargomain import load_config_file
 
 
 @pytest.fixture

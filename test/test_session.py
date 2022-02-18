@@ -1,9 +1,11 @@
-from attr import assoc
-import pytest
 import os
-from s3cargo.cargomain import Cargo
-from test.utils import URL, BUCKETNAME, TESTROOT, export_config
 from shutil import rmtree
+from test.utils import BUCKETNAME, TESTROOT, URL, export_config
+
+import pytest
+from attr import assoc
+
+from s3_cargo.cargomain import Cargo
 
 
 @pytest.fixture
@@ -15,7 +17,7 @@ def starting_config():
             "url": URL,
             "bucket": BUCKETNAME,
         },
-        "resources": [{'input/*.txt':{'mode':'transient', 'unravel':True }}],
+        "resources": [{"input/*.txt": {"mode": "transient", "unravel": True}}],
         "futures": [],
     }
     yield cfg
@@ -31,6 +33,6 @@ def starting_config():
 def test_session(starting_config):
     cfg = export_config(starting_config)
     with Cargo(cfg) as c:
-        c.cfg.options.user = 'testuser'
-        num_files = sum(fi.is_file() for fi in c.dst.glob('*'))
+        c.cfg.options.user = "testuser"
+        num_files = sum(fi.is_file() for fi in c.dst.glob("*"))
         assert num_files == 11

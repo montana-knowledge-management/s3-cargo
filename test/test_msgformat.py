@@ -1,4 +1,4 @@
-from s3cargo.msgformat import *
+from s3_cargo.msgformat import *
 
 
 def test_green():

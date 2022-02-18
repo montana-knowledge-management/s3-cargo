@@ -3,6 +3,7 @@ from pathlib import Path, PurePath
 
 from pydantic import BaseModel, HttpUrl, validator
 
+__all__ = ("CargoOptions", "ResourceItem", "Future", "CargoConfig")
 
 class CargoOptions(BaseModel):
     projectid: str

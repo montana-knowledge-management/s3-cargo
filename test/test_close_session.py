@@ -11,7 +11,7 @@ from test.utils import (
 import pytest
 import yaml
 
-from s3cargo import Cargo
+from s3_cargo import Cargo
 
 
 @pytest.fixture
