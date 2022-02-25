@@ -79,7 +79,7 @@ class Cargo:
 
             self._download_key(key, asfile)
             if resource.unpack:
-                if asfile.suffix == ".zip":
+                if asfile.suffix in {".zip", ".rar"}:
                     tempzfile = ZipFile(asfile)
                     # TODO: contents of the zip file can be persistent
                     tempzfile.extractall(path=asfile.parent.as_posix())
