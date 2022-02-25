@@ -21,7 +21,7 @@ pydantic = "^1.9.0"
 boto3 = "^1.20.49"
 pudb = {version = "^2022.1", optional = true}
 mkdocs = "^1.2.3"
-mkdocs-material = "^8.1.11"
+mkdocs-material = ">7.3"
 mkdocs-git-revision-date-plugin = "^0.3.1"
 mkdocstrings = ">0.16.0"
 
