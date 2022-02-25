@@ -88,7 +88,7 @@ class Cargo:
                     with tarfile.open(asfile, "r:bz2") as z:
                         z.extractall(path=asfile.parent.as_posix())
 
-                asfile.unlink()
+                # asfile.unlink()
 
     def _fileter_keys(self, keys, resource: ResourceItem):
         for key in keys:
