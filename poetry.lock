@@ -830,7 +830,7 @@ dev_tools = ["pudb"]
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.8, <3.10"
-content-hash = "92ecec223d5fdccb1941b438d53118f186cc181364e6ce52f8e684f3f46d1db1"
+content-hash = "d45069839b2da923403499e269f02b5e15c6ff65d95a57f9ba0af31fe6dd2ed6"
 
 [metadata.files]
 astroid = [
