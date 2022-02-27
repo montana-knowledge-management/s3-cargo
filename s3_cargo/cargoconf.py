@@ -1,6 +1,6 @@
 from os import getenv
 from pathlib import Path, PurePath
-from typing import Optional
+from typing import List, Optional
 
 from pydantic import BaseModel, HttpUrl, validator
 
@@ -42,8 +42,8 @@ class ResourceItem(BaseModel):
 class Future(BaseModel):
     name: str
     compress: str = ""
-    selector: list[str]
-    emit: list[str]
+    selector: List[str]
+    emit: List[str]
 
     @validator("name")
     def validate_name(cls, v):
@@ -52,8 +52,8 @@ class Future(BaseModel):
 
 class CargoConfig(BaseModel):
     options: CargoOptions
-    resources: list[ResourceItem] = []
-    futures: list[Future] = []
+    resources: List[ResourceItem] = []
+    futures: List[Future] = []
 
     @validator("resources", each_item=True, pre=True)
     def format_resourceitem_input(cls, v):
