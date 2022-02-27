@@ -1,27 +1,35 @@
+import tarfile
 from fnmatch import fnmatch
 from itertools import chain
 from os import lstat
 from os.path import expandvars
 from pathlib import Path, PurePath
 from shutil import rmtree
-import tarfile
 from zipfile import ZIP_DEFLATED, ZipFile
 
 import boto3
 from pydantic import FilePath
+from pyunpack import Archive
 from yaml import safe_load
 
-from pyunpack import Archive
 from s3_cargo import CargoConfig, fail
 from s3_cargo.cargoconf import Future, ResourceItem
 from s3_cargo.msgformat import green
 
 
 class Cargo:
-    def __init__(self, cargoconf: FilePath):
+    def __init__(self, cargoconf: FilePath, root: str = ""):
         self.cfgfile = cargoconf
         self.cfg = load_config_file(self.cfgfile)
-        self.dst = cargoconf.parent.joinpath(self.cfg.options.destination)
+        if root:
+            self.dst = (
+                Path(root)
+                .joinpath(self.cfg.options.destination)
+                .expanduser()
+                .resolve()
+            )
+        else:
+            self.dst = cargoconf.parent.joinpath(self.cfg.options.destination)
 
         self.s3 = boto3.resource("s3", endpoint_url=self.cfg.options.url)
         self.bucket = self.s3.Bucket(self.cfg.options.bucket)
@@ -80,7 +88,7 @@ class Cargo:
 
             self._download_key(key, asfile)
             if resource.unpack:
-                if asfile.suffix ==".zip":
+                if asfile.suffix == ".zip":
                     tempzfile = ZipFile(asfile)
                     # TODO: contents of the zip file can be persistent
                     tempzfile.extractall(path=asfile.parent.as_posix())
@@ -90,9 +98,12 @@ class Cargo:
                         z.extractall(path=asfile.parent.as_posix())
 
                 elif asfile.suffix == ".rar":
-                    Archive(asfile.as_posix()).extractall(asfile.parent.as_posix())
+                    Archive(asfile.as_posix()).extractall(
+                        asfile.parent.as_posix()
+                    )
 
-                # asfile.unlink()
+                if not resource.keeparchive:
+                    asfile.unlink()
 
     def _fileter_keys(self, keys, resource: ResourceItem):
         for key in keys:

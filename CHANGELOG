@@ -1,5 +1,7 @@
 2022.2
-  - support for .rar unpack added
+  - Added: support for .rar unpack
+  - Added: keeparchive option
+  - Added: root option in Cargo init
 
 
 2022.1

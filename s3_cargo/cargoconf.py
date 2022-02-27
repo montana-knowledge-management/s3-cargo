@@ -1,13 +1,15 @@
 from os import getenv
 from pathlib import Path, PurePath
+from typing import Optional
 
 from pydantic import BaseModel, HttpUrl, validator
 
 __all__ = ("CargoOptions", "ResourceItem", "Future", "CargoConfig")
 
+
 class CargoOptions(BaseModel):
     projectid: str
-    destination: Path
+    destination: Path = Path(".")
     url: HttpUrl
     bucket: str
     user: str = ""
@@ -25,6 +27,7 @@ class ResourceItem(BaseModel):
     bind: str = ""
     unpack: bool = False
     unravel: bool = False
+    keeparchive: bool = True
 
     @validator("mode")
     def check_mode(cls, v):
