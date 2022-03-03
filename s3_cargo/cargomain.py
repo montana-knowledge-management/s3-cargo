@@ -1,6 +1,8 @@
 import tarfile
 from fnmatch import fnmatch
+from io import StringIO
 from itertools import chain
+from json import dumps
 from os import lstat
 from os.path import expandvars
 from pathlib import Path, PurePath
@@ -34,12 +36,9 @@ class Cargo:
         self.s3 = boto3.resource("s3", endpoint_url=self.cfg.options.url)
         self.bucket = self.s3.Bucket(self.cfg.options.bucket)
 
-    def __enter__(self):
-        self.open_session()
-        return self
-
-    def __exit__(self, exc_type, exc_value, traceback):
-        self.close_session()
+    @classmethod
+    def from_json(cls, config: dict, root: str):
+        return cls(StringIO(dumps(config)), root=root)
 
     def open_session(self):
         print("OPEN SESSION")
@@ -59,6 +58,13 @@ class Cargo:
         for resource in self.cfg.resources:
             filtered_keys = self._fileter_keys(fetched_keys, resource)
             self._pull_keys(resource, filtered_keys)
+
+    def __enter__(self):
+        self.open_session()
+        return self
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        self.close_session()
 
     def _fetch_keys(self, prefix):
         try:
@@ -202,7 +208,12 @@ class Cargo:
 
 
 def load_config_file(config_file: FilePath) -> CargoConfig:
-    cfg_raw = safe_load(expandvars(config_file.read_text()))
+    try:
+        content = config_file.read_text()
+    except AttributeError:
+        content = config_file.read()
+
+    cfg_raw = safe_load(expandvars(content))
     cfg = CargoConfig(**cfg_raw)
     # pprint(loads(cfg.json()))
     return cfg
