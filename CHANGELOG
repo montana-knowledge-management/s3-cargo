@@ -1,0 +1,11 @@
+2022.2
+  - Added: support for .rar unpack
+  - Added: keeparchive option
+  - Added: root option in Cargo init
+  - Added: from_json constructor
+
+
+2022.1
+  - initial release
+  - documentation added
+  - tests added

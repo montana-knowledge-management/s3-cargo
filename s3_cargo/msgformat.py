@@ -1,5 +1,5 @@
-
 __all__ = ("green", "red", "warning", "bold", "underline", "success", "fail")
+
 
 def green(str_):
     return f"\033[92m{str_}\033[0m"

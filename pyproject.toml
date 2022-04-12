@@ -1,7 +1,7 @@
 # Main package description
 [tool.poetry]
 name = "s3-cargo"
-version = "2022.1"
+version = "2022.2"
 description = "Manage your projects in S3 buckets."
 authors = [
     "MONTANA Knowledge Management ltd. <info@distiller.dev>",
@@ -15,15 +15,17 @@ license = "AGPL"
 
 # Project dependencies only
 [tool.poetry.dependencies]
-python = ">=3.9, <4"
+python = ">=3.8, <3.10"
 PyYAML = "^6.0"
 pydantic = "^1.9.0"
 boto3 = "^1.20.49"
 pudb = {version = "^2022.1", optional = true}
 mkdocs = "^1.2.3"
-mkdocs-material = "^8.1.11"
+mkdocs-material = ">7.3"
 mkdocs-git-revision-date-plugin = "^0.3.1"
-mkdocstrings = "^0.18.0"
+mkdocstrings = ">0.16.0"
+pyunpack = "^0.2.2"
+patool = "^1.12"
 
 
 [tool.poetry.dev-dependencies]
