@@ -101,7 +101,29 @@ class Cargo:
 
                 elif asfile.suffix == ".bz2":
                     with tarfile.open(asfile, "r:bz2") as z:
-                        z.extractall(path=asfile.parent.as_posix())
+                        
+                        import os
+                        
+                        def is_within_directory(directory, target):
+                            
+                            abs_directory = os.path.abspath(directory)
+                            abs_target = os.path.abspath(target)
+                        
+                            prefix = os.path.commonprefix([abs_directory, abs_target])
+                            
+                            return prefix == abs_directory
+                        
+                        def safe_extract(tar, path=".", members=None, *, numeric_owner=False):
+                        
+                            for member in tar.getmembers():
+                                member_path = os.path.join(path, member.name)
+                                if not is_within_directory(path, member_path):
+                                    raise Exception("Attempted Path Traversal in Tar File")
+                        
+                            tar.extractall(path, members, numeric_owner=numeric_owner) 
+                            
+                        
+                        safe_extract(z, path=asfile.parent.as_posix())
 
                 elif asfile.suffix == ".rar":
                     Archive(asfile.as_posix()).extractall(
