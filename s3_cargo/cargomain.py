@@ -14,9 +14,8 @@ from pydantic import FilePath
 from pyunpack import Archive
 from yaml import safe_load
 
-from s3_cargo import CargoConfig, fail
-from s3_cargo.cargoconf import Future, ResourceItem
-from s3_cargo.msgformat import green
+from s3_cargo.cargoconf import Future, ResourceItem, CargoConfig
+from s3_cargo.msgformat import green, fail
 
 
 class Cargo:

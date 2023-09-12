@@ -59,8 +59,8 @@ quiet = true
 # https://coverage.readthedocs.io/en/6.1.1/config.html
 
 [tool.coverage.run]
-command_line = "-m py.test --random-order"
-source = ['src']
+command_line = "-m pytest --random-order"
+source = ['s3_cargo']
 branch = true
 # omit = []
 

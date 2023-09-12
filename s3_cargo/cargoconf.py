@@ -1,6 +1,6 @@
 from os import getenv
 from pathlib import Path, PurePath
-from typing import List, Optional
+from typing import List 
 
 from pydantic import BaseModel, HttpUrl, validator
 

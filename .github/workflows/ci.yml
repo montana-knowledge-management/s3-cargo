@@ -10,6 +10,8 @@ on:
   workflow_dispatch:
 env:
   WKROOT: /home/runner/work/wk-data/
+  S3_URL: ${{secrets.S3_URL}}
+  S3_BUCKET: ${{secrets.S3_BUCKET}}
 
 jobs:
   build:

@@ -1,9 +1,6 @@
-import os
-from shutil import rmtree
-from test.utils import BUCKETNAME, TESTROOT, URL, export_config
+from test.utils import BUCKETNAME, URL, export_config
 
 import pytest
-from attr import assoc
 
 from s3_cargo.cargomain import Cargo
 
