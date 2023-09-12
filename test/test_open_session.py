@@ -131,8 +131,8 @@ def test_zipped_unpack(starting_config):
     Select a zipped file from input/ and place it under the local root directory then unpack it.
     """
     starting_config["resources"] = [
-        {"input/f13.zip": {"unpack": True, "keeparchive":False}},
-        {"input/f36.tar.bz2": {"unpack": True, "keeparchive":False}},
+        {"input/f13.zip": {"unpack": True, "keeparchive": False}},
+        {"input/f36.tar.bz2": {"unpack": True, "keeparchive": False}},
     ]
     test_cfg = export_config(starting_config)
     c = Cargo(test_cfg)

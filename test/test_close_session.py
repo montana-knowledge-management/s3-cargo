@@ -1,12 +1,4 @@
-from test.utils import (
-    BUCKETNAME,
-    PROJECTID,
-    RESULTS,
-    TESTROOT,
-    URL,
-    cleanup_bucket_folder,
-    is_key_exists,
-)
+from test.utils import BUCKETNAME, PROJECTID, RESULTS, TESTROOT, URL, cleanup_bucket_folder, is_key_exists
 
 import pytest
 import yaml

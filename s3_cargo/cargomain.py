@@ -14,9 +14,8 @@ from pydantic import FilePath
 from pyunpack import Archive
 from yaml import safe_load
 
-from s3_cargo import CargoConfig, fail
-from s3_cargo.cargoconf import Future, ResourceItem
-from s3_cargo.msgformat import green
+from s3_cargo.cargoconf import CargoConfig, Future, ResourceItem
+from s3_cargo.msgformat import fail, green
 
 
 class Cargo:
@@ -24,12 +23,7 @@ class Cargo:
         self.cfgfile = cargoconf
         self.cfg = load_config_file(self.cfgfile)
         if root:
-            self.dst = (
-                Path(root)
-                .joinpath(self.cfg.options.destination)
-                .expanduser()
-                .resolve()
-            )
+            self.dst = Path(root).joinpath(self.cfg.options.destination).expanduser().resolve()
         else:
             self.dst = cargoconf.parent.joinpath(self.cfg.options.destination)
 
@@ -104,9 +98,7 @@ class Cargo:
                         z.extractall(path=asfile.parent.as_posix())
 
                 elif asfile.suffix == ".rar":
-                    Archive(asfile.as_posix()).extractall(
-                        asfile.parent.as_posix()
-                    )
+                    Archive(asfile.as_posix()).extractall(asfile.parent.as_posix())
 
                 if not resource.keeparchive:
                     asfile.unlink()
@@ -136,9 +128,7 @@ class Cargo:
             print(f"\r{progress}{key.key}", end="", flush=True)
 
         callback.done = 0
-        self.bucket.download_file(
-            key.key, to.as_posix(), Callback=lambda ch: callback(key, ch)
-        )
+        self.bucket.download_file(key.key, to.as_posix(), Callback=lambda ch: callback(key, ch))
         print("\r" + green("DONE".center(10)) + key.key)
 
     def close_session(self):
@@ -153,9 +143,7 @@ class Cargo:
     def _compress_push_future(self, future, items):
         filename = self.dst / f"{future.name}.{future.compress}"
         if future.compress == "zip":
-            with ZipFile(
-                filename, "w", compression=ZIP_DEFLATED, compresslevel=9
-            ) as zfile:
+            with ZipFile(filename, "w", compression=ZIP_DEFLATED, compresslevel=9) as zfile:
                 for item in items:
                     zfile.write(item, item.name)
 
@@ -175,9 +163,7 @@ class Cargo:
         for item in items:
             for dest in future.emit:
                 dest = self._validate_future_destination(dest)
-                key = "/".join(
-                    [self.cfg.options.projectid, dest, future.name, item.name]
-                )
+                key = "/".join([self.cfg.options.projectid, dest, future.name, item.name])
                 self._upload_item(item, key)
 
     def _validate_future_destination(self, d):
@@ -187,9 +173,7 @@ class Cargo:
         elif first == "project_results":
             return PurePath("project_results", *rest).as_posix()
         elif first == "input":
-            return PurePath(
-                "home", self.cfg.options.user, "input", *rest
-            ).as_posix()
+            return PurePath("home", self.cfg.options.user, "input", *rest).as_posix()
         else:
             return PurePath("home", self.cfg.options.user, *rest).as_posix()
 
@@ -201,9 +185,7 @@ class Cargo:
 
         callback.done = 0
         callback.size = lstat(item).st_size
-        self.bucket.upload_file(
-            item.as_posix(), key, Callback=lambda ch: callback(key, ch)
-        )
+        self.bucket.upload_file(item.as_posix(), key, Callback=lambda ch: callback(key, ch))
         print(green("\r" + "DONE".center(10)) + key)
 
 
