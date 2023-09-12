@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "s3-cargo"
-version = "2022.2"
+version = "2023.1"
 description = "Manage your projects in S3 buckets."
 authors = [
     "MONTANA Knowledge Management ltd. <info@distiller.dev>",
