@@ -32,9 +32,7 @@ class ResourceItem(BaseModel):
     @validator("mode")
     def check_mode(cls, v):
         if v.lower() not in {"persistent", "transient"}:
-            raise ValueError(
-                f'mode can be either "transient" or "persistent".Got: "{v}"'
-            )
+            raise ValueError(f'mode can be either "transient" or "persistent".Got: "{v}"')
 
         return v
 
@@ -57,7 +55,6 @@ class CargoConfig(BaseModel):
 
     @validator("resources", each_item=True, pre=True)
     def format_resourceitem_input(cls, v):
-
         if isinstance(v, str):
             name, settings = v, dict()
         else:
