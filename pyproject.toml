@@ -1,25 +1,23 @@
-# Main package description
 [tool.poetry]
 name = "s3-cargo"
 version = "2022.2"
 description = "Manage your projects in S3 buckets."
 authors = [
     "MONTANA Knowledge Management ltd. <info@distiller.dev>",
-    "Daniel Nagy <daniel.nagy@montana.hu>",
-    "Tamas Orosz <orosz.tamas@montana.hu>",
-    "Krisztian Gado <gado.krisztian@montana.hu>",
-    "Gergely Csanyi <csanyi.gergely@montana.hu>",
-    "Istvan Uveges <istavan.uveges@montana.hu>"
 ]
 license = "AGPL"
+readme="README.md"
+classifiers = [
+    "Programming Language :: Python :: 3.10",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Text Processing :: General"
+]
 
-# Project dependencies only
 [tool.poetry.dependencies]
-python = ">=3.8, <3.10"
+python = "^3.10, <3.11"
 PyYAML = "^6.0"
 pydantic = "^1.9.0"
 boto3 = "^1.20.49"
-pudb = {version = "^2022.1", optional = true}
 mkdocs = "^1.2.3"
 mkdocs-material = ">7.3"
 mkdocs-git-revision-date-plugin = "^0.3.1"
@@ -27,8 +25,7 @@ mkdocstrings = ">0.16.0"
 pyunpack = "^0.2.2"
 patool = "^1.12"
 
-
-[tool.poetry.dev-dependencies]
+[tool.poetry.group.dev.dependencies]
 black = "*"
 coverage = "*"
 pre-commit = "*"
@@ -36,12 +33,10 @@ pytest = "*"
 isort = "*"
 pyupgrade = "*"
 pylint = "*"
-
-[tool.poetry.extras]
-dev_tools = ["pudb"]
+pytest-random-order = "*"
 
 [build-system]
-requires = ["poetry-core>=1.0.0"]
+requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
 
@@ -49,11 +44,12 @@ build-backend = "poetry.core.masonry.api"
 
 #BLACK
 [tool.black]
-line-length = 80
+line-length = 120
 target-version = ['py39']
 # force-exclude = '''
 #   (
-#     test
+#     resources/
+#   | tests/
 #   )
 # '''
 quiet = true
@@ -63,8 +59,8 @@ quiet = true
 # https://coverage.readthedocs.io/en/6.1.1/config.html
 
 [tool.coverage.run]
-command_line = "-m py.test"
-source = ['s3_cargo']
+command_line = "-m py.test --random-order"
+source = ['src']
 branch = true
 # omit = []
 
@@ -76,7 +72,7 @@ exclude_lines = [
     'def __str',
     '@(abc\.)?abstractmethod'
 ]
-omit = ['test']
+omit = ['tests']
 
 
 
@@ -85,20 +81,19 @@ omit = ['test']
 
 [tool.isort]
 profile = "black"
-line_length = 80
+line_length = 120
 case_sensitive = true
 use_parentheses = false
 include_trailing_comma = true
 multi_line_output = 3
 force_grid_wrap = 0
 quiet = true
-skip = ["__init__.py"]
 
 [tool.pylint.MASTER]
 max-line-length = 120
 fail-under = 0.85
 ignore = ['LICENSE']
-ignore-paths = ['test']
+ignore-paths = ['tests', 'resources']
 disable = [
     "bad-continuation",
     "duplicate-code",
