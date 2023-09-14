@@ -27,7 +27,7 @@ class Cargo:
         else:
             self.dst = cargoconf.parent.joinpath(self.cfg.options.destination)
 
-        self.s3 = boto3.resource("s3", endpoint_url=self.cfg.options.url)
+        self.s3 = boto3.resource("s3", endpoint_url=str(self.cfg.options.url))
         self.bucket = self.s3.Bucket(self.cfg.options.bucket)
 
     @classmethod

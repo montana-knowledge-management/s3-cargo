@@ -1,8 +1,8 @@
 from os import getenv
 from pathlib import Path, PurePath
-from typing import List
+from typing import Annotated, List
 
-from pydantic import BaseModel, HttpUrl, validator
+from pydantic import BaseModel, BeforeValidator, HttpUrl, field_validator, validator
 
 __all__ = ("CargoOptions", "ResourceItem", "Future", "CargoConfig")
 
@@ -29,7 +29,8 @@ class ResourceItem(BaseModel):
     unravel: bool = False
     keeparchive: bool = True
 
-    @validator("mode")
+    @field_validator("mode")
+    @classmethod
     def check_mode(cls, v):
         if v.lower() not in {"persistent", "transient"}:
             raise ValueError(f'mode can be either "transient" or "persistent".Got: "{v}"')
@@ -43,21 +44,25 @@ class Future(BaseModel):
     selector: List[str]
     emit: List[str]
 
-    @validator("name")
+    @field_validator("name")
+    @classmethod
     def validate_name(cls, v):
         return PurePath(v).stem
 
 
+def format_resourceitem_input(v):
+    items = []
+    for vi in v:
+        if isinstance(vi, str):
+            name, settings = vi, dict()
+        else:
+            name, settings = vi.popitem()
+
+        items.append(dict(selector=name, **settings))
+    return items
+
+
 class CargoConfig(BaseModel):
     options: CargoOptions
-    resources: List[ResourceItem] = []
+    resources: Annotated[List[ResourceItem], BeforeValidator(format_resourceitem_input)] = []
     futures: List[Future] = []
-
-    @validator("resources", each_item=True, pre=True)
-    def format_resourceitem_input(cls, v):
-        if isinstance(v, str):
-            name, settings = v, dict()
-        else:
-            name, settings = v.popitem()
-
-        return dict(selector=name, **settings)
