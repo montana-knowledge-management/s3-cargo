@@ -10,5 +10,5 @@
 
 ### Install
 ```shell
-poetry add git+ssh://github.com/montana-knowledge-management/s3-cargo.git#2023.1
+poetry add git+ssh://github.com/montana-knowledge-management/s3-cargo.git#v2023.2
 ```

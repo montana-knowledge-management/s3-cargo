@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "s3-cargo"
-version = "2023.1"
+version = "2023.2"
 description = "Manage your projects in S3 buckets."
 authors = [
     "MONTANA Knowledge Management ltd. <info@distiller.dev>",
@@ -16,7 +16,7 @@ classifiers = [
 [tool.poetry.dependencies]
 python = "^3.10, <3.11"
 PyYAML = "^6.0"
-pydantic = "^1.9.0"
+pydantic = ">=2.0.0"
 boto3 = "^1.20.49"
 mkdocs = "^1.2.3"
 mkdocs-material = ">7.3"
